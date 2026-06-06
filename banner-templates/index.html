@@ -42,65 +42,26 @@
             font-weight: 700;
         }
 
-        .form-section {
+        .embed-section {
             background: #f0f0f0;
             padding: 32px;
             text-align: center;
         }
 
-        .form-section p {
+        .embed-section p {
             color: #555;
             margin-bottom: 20px;
             font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        .form-row {
+        .substack-embed {
             display: flex;
-            gap: 12px;
-            max-width: 440px;
-            margin: 0 auto;
+            justify-content: center;
         }
 
-        .form-row input[type="email"] {
-            flex: 1;
-            padding: 12px 14px;
-            border: 1px solid #ccc;
+        .substack-embed iframe {
             border-radius: 4px;
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        .form-row input[type="email"]:focus {
-            border-color: #e6602b;
-        }
-
-        .form-row button {
-            padding: 12px 24px;
-            background: #e6602b;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .form-row button:hover {
-            background: #d45524;
-        }
-
-        .form-row button:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
-
-        #status-msg {
-            margin-top: 16px;
-            font-size: 0.9rem;
-            color: #555;
-            min-height: 1.2em;
         }
 
         .footer-note {
@@ -116,75 +77,84 @@
         <div class="header">
             <h1>Get My 20 Editable LinkedIn Banner Templates To Turn Your Profile Into A Lead Machine</h1>
         </div>
-        <div class="form-section">
-            <p>Drop your best email below to get instant access to the templates:</p>
-            <form id="subscribe-form" class="form-row">
-                <input type="email" id="email" placeholder="Email Address" required>
-                <button type="submit" id="submit-btn">Get Instant Access</button>
-            </form>
-            <p id="status-msg"></p>
+        <div class="embed-section">
+            <p id="step-text">Drop your best email below to get instant access to the templates:</p>
+            <div class="substack-embed">
+                <iframe
+                    id="substack-iframe"
+                    src="https://muzahidmaruf.substack.com/embed"
+                    width="480"
+                    height="320"
+                    style="border:1px solid #EEE; background:white;"
+                    frameborder="0"
+                    scrolling="no"
+                    sandbox="allow-forms allow-scripts allow-same-origin">
+                </iframe>
+            </div>
         </div>
         <div class="footer-note">
             We respect your privacy. Unsubscribe at any time.
         </div>
     </div>
 
-    <!-- Hidden form + iframe to submit to Substack in the background -->
-    <form id="ss-form" action="https://muzahidmaruf.substack.com/subscribe" method="POST" target="ss-hidden" style="display:none;">
-        <input type="hidden" name="email" id="ss-email">
-    </form>
-    <iframe name="ss-hidden" style="display:none;"></iframe>
-
     <script>
         (function() {
+            var iframe = document.getElementById('substack-iframe');
+            var stepText = document.getElementById('step-text');
             var figmaUrl = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
-            var form = document.getElementById('subscribe-form');
-            var btn = document.getElementById('submit-btn');
-            var emailInput = document.getElementById('email');
-            var statusMsg = document.getElementById('status-msg');
-            var ssForm = document.getElementById('ss-form');
-            var ssEmail = document.getElementById('ss-email');
             var redirected = false;
+            var countdownStarted = false;
+            var loadCount = 0;
+            var timer = null;
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                var email = emailInput.value.trim();
-                if (!email) return;
+            function redirect() {
+                if (redirected) return;
+                redirected = true;
+                clearInterval(timer);
+                window.location.href = figmaUrl;
+            }
 
-                btn.disabled = true;
+            function startCountdown() {
+                if (countdownStarted || redirected) return;
+                countdownStarted = true;
                 var countdown = 3;
-                statusMsg.textContent = 'Subscribing... Redirecting in ' + countdown + 's';
-
-                // Attempt 1: Background fetch to Substack API (silent, no-cors)
-                try {
-                    fetch('https://muzahidmaruf.substack.com/api/v1/free', {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: email, publication_id: 'muzahidmaruf' })
-                    });
-                } catch (err) {
-                    // Silent fail
-                }
-
-                // Attempt 2: Hidden iframe form submission
-                ssEmail.value = email;
-                ssForm.submit();
-
-                // 3-second countdown then redirect
-                var timer = setInterval(function() {
+                stepText.textContent = 'Subscribing... Redirecting in ' + countdown + 's';
+                timer = setInterval(function() {
                     countdown--;
                     if (countdown <= 0) {
                         clearInterval(timer);
-                        if (!redirected) {
-                            redirected = true;
-                            window.location.href = figmaUrl;
-                        }
+                        redirect();
                     } else {
-                        statusMsg.textContent = 'Subscribing... Redirecting in ' + countdown + 's';
+                        stepText.textContent = 'Subscribing... Redirecting in ' + countdown + 's';
                     }
                 }, 1000);
+            }
+
+            // 1. Detect iframe reload (form submitted and response loaded inside iframe)
+            iframe.addEventListener('load', function() {
+                loadCount++;
+                if (loadCount >= 2) {
+                    // Form response loaded inside iframe
+                    startCountdown();
+                }
             });
+
+            // 2. Detect user clicking inside the iframe via window blur
+            window.addEventListener('blur', function() {
+                if (!countdownStarted) {
+                    startCountdown();
+                }
+            });
+
+            // 3. Detect iframe becoming the active element
+            var activeCheck = setInterval(function() {
+                if (document.activeElement === iframe) {
+                    clearInterval(activeCheck);
+                    if (!countdownStarted) {
+                        startCountdown();
+                    }
+                }
+            }, 200);
         })();
     </script>
 </body>
