@@ -99,43 +99,49 @@
 
     <script>
         (function() {
-            var iframe = document.getElementById('substack-iframe');
             var stepText = document.getElementById('step-text');
+            var iframe = document.getElementById('substack-iframe');
             var figmaUrl = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
             var redirected = false;
-            var loadCount = 0;
-            var blurred = false;
+            var countdown = 3;
+            var timer = null;
+            var started = false;
 
             function redirect() {
                 if (redirected) return;
                 redirected = true;
-                stepText.textContent = "You're subscribed! Redirecting you to your templates...";
                 window.location.href = figmaUrl;
             }
 
-            // 1. Detect iframe reload (form submitted inside iframe and response loaded)
-            iframe.addEventListener('load', function() {
-                loadCount++;
-                if (loadCount >= 2) {
-                    redirect();
-                }
-            });
+            function startCountdown() {
+                if (started || redirected) return;
+                started = true;
+                countdown = 3;
+                stepText.textContent = "Processing... redirecting you to your templates in " + countdown + "s";
+                timer = setInterval(function() {
+                    countdown--;
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        redirect();
+                    } else {
+                        stepText.textContent = "Processing... redirecting you to your templates in " + countdown + "s";
+                    }
+                }, 1000);
+            }
 
-            // 2. Detect postMessage from Substack embed widget
-            window.addEventListener('message', function(e) {
-                if (e.origin.indexOf('substack.com') !== -1 && blurred) {
-                    redirect();
+            // Detect user clicking inside the iframe (iframe becomes active element)
+            var activeCheck = setInterval(function() {
+                if (document.activeElement === iframe) {
+                    clearInterval(activeCheck);
+                    startCountdown();
                 }
-            });
+            }, 200);
 
-            // 3. Detect user returning from another tab (popup/new-tab scenario)
+            // Backup: window blur when iframe is active element means strong interaction
             window.addEventListener('blur', function() {
-                blurred = true;
-            });
-            window.addEventListener('focus', function() {
-                // Only redirect if user had interacted with iframe and we've seen at least one iframe load
-                if (blurred && loadCount >= 1) {
-                    redirect();
+                if (document.activeElement === iframe) {
+                    clearInterval(activeCheck);
+                    startCountdown();
                 }
             });
         })();
