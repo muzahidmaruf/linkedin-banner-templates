@@ -125,16 +125,34 @@
 
     <script>
         document.getElementById('subscribe-form').addEventListener('submit', function(e) {
-            const email = this.querySelector('input[name="email"]').value;
+            const form = this;
+            const iframe = document.getElementById('substack-target');
+            const button = form.querySelector('button');
+            let redirected = false;
 
-            // Submit email to Substack in the background via the hidden iframe
-            this.action = 'https://muzahidmaruf.substack.com/subscribe';
-            this.method = 'post';
+            // Set Substack endpoint
+            form.action = 'https://muzahidmaruf.substack.com/subscribe';
+            form.method = 'post';
 
-            // Redirect the main page to Figma immediately
+            // Disable button while submitting
+            button.disabled = true;
+            button.textContent = 'Submitting...';
+
+            // When iframe loads, Substack received the subscriber → redirect
+            iframe.onload = function() {
+                if (!redirected) {
+                    redirected = true;
+                    window.location.href = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
+                }
+            };
+
+            // Fallback: redirect after 4 seconds if iframe load never fires
             setTimeout(function() {
-                window.location.href = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
-            }, 200);
+                if (!redirected) {
+                    redirected = true;
+                    window.location.href = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
+                }
+            }, 4000);
         });
     </script>
 </body>
