@@ -58,7 +58,6 @@
         .substack-embed {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
         }
 
         .substack-embed iframe {
@@ -102,15 +101,41 @@
         (function() {
             var iframe = document.getElementById('substack-iframe');
             var stepText = document.getElementById('step-text');
-            var loadCount = 0;
             var figmaUrl = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
+            var redirected = false;
+            var loadCount = 0;
+            var blurred = false;
 
+            function redirect() {
+                if (redirected) return;
+                redirected = true;
+                stepText.textContent = "You're subscribed! Redirecting you to your templates...";
+                window.location.href = figmaUrl;
+            }
+
+            // 1. Detect iframe reload (form submitted inside iframe and response loaded)
             iframe.addEventListener('load', function() {
                 loadCount++;
-                // First load = embed initializing. Second load = user submitted the form.
                 if (loadCount >= 2) {
-                    stepText.textContent = 'You\'re subscribed! Redirecting you to your templates...';
-                    window.location.href = figmaUrl;
+                    redirect();
+                }
+            });
+
+            // 2. Detect postMessage from Substack embed widget
+            window.addEventListener('message', function(e) {
+                if (e.origin.indexOf('substack.com') !== -1 && blurred) {
+                    redirect();
+                }
+            });
+
+            // 3. Detect user returning from another tab (popup/new-tab scenario)
+            window.addEventListener('blur', function() {
+                blurred = true;
+            });
+            window.addEventListener('focus', function() {
+                // Only redirect if user had interacted with iframe and we've seen at least one iframe load
+                if (blurred && loadCount >= 1) {
+                    redirect();
                 }
             });
         })();
