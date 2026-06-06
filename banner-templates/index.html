@@ -42,53 +42,48 @@
             font-weight: 700;
         }
 
-        .form-section {
+        .embed-section {
             background: #f0f0f0;
             padding: 32px;
             text-align: center;
         }
 
-        .form-section p {
+        .embed-section p {
             color: #555;
             margin-bottom: 20px;
             font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        .form-row {
+        .substack-embed {
             display: flex;
-            gap: 12px;
-            max-width: 440px;
-            margin: 0 auto;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
-        .form-row input[type="email"] {
-            flex: 1;
-            padding: 12px 14px;
-            border: 1px solid #ccc;
+        .substack-embed iframe {
             border-radius: 4px;
-            font-size: 0.95rem;
-            outline: none;
         }
 
-        .form-row input[type="email"]:focus {
-            border-color: #e6602b;
-        }
-
-        .form-row button {
-            padding: 12px 24px;
+        .templates-btn {
+            display: inline-block;
+            padding: 14px 28px;
             background: #e6602b;
             color: white;
-            border: none;
+            text-decoration: none;
             border-radius: 4px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
         }
 
-        .form-row button:hover {
+        .templates-btn:hover {
             background: #d45524;
+        }
+
+        .step-note {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 12px;
         }
 
         .footer-note {
@@ -104,26 +99,25 @@
         <div class="header">
             <h1>Get My 20 Editable LinkedIn Banner Templates To Turn Your Profile Into A Lead Machine</h1>
         </div>
-        <div class="form-section">
-            <p>Drop your best email below to get instant access to the templates:</p>
-            <form id="subscribe-form" class="form-row">
-                <input type="email" id="email" placeholder="Email Address" required>
-                <button type="submit">Get Instant Access</button>
-            </form>
+        <div class="embed-section">
+            <p>Step 1: Drop your email below to subscribe:</p>
+            <div class="substack-embed">
+                <iframe
+                    src="https://muzahidmaruf.substack.com/embed"
+                    width="480"
+                    height="320"
+                    style="border:1px solid #EEE; background:white;"
+                    frameborder="0"
+                    scrolling="no">
+                </iframe>
+            </div>
+            <p>Step 2: Click below to access your templates instantly:</p>
+            <a class="templates-btn" href="https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1" target="_blank">Get Your Templates →</a>
+            <p class="step-note">(No need to wait — the link is already unlocked!)</p>
         </div>
         <div class="footer-note">
             We respect your privacy. Unsubscribe at any time.
         </div>
     </div>
-
-    <script>
-        document.getElementById('subscribe-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var email = document.getElementById('email').value;
-            var figmaUrl = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
-            var substackUrl = 'https://muzahidmaruf.substack.com/subscribe?email=' + encodeURIComponent(email) + '&next=' + encodeURIComponent(figmaUrl);
-            window.location.href = substackUrl;
-        });
-    </script>
 </body>
 </html>
