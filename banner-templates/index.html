@@ -65,53 +65,6 @@
             border-radius: 4px;
         }
 
-        .templates-btn {
-            display: none;
-            padding: 14px 28px;
-            background: #e6602b;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .templates-btn.visible {
-            display: inline-block;
-        }
-
-        .templates-btn:hover {
-            background: #d45524;
-        }
-
-        .step-note {
-            display: none;
-            color: #666;
-            font-size: 0.85rem;
-            margin-top: 12px;
-        }
-
-        .step-note.visible {
-            display: block;
-        }
-
-        .fallback {
-            display: none;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: #888;
-        }
-
-        .fallback.visible {
-            display: block;
-        }
-
-        .fallback a {
-            color: #e6602b;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
         .footer-note {
             padding: 16px 32px 24px;
             text-align: center;
@@ -139,9 +92,6 @@
                     sandbox="allow-forms allow-scripts allow-same-origin">
                 </iframe>
             </div>
-            <a id="templates-btn" class="templates-btn" href="https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1" target="_blank">Get Your Templates →</a>
-            <p id="step-note" class="step-note">Thanks for subscribing! Click the button above to open your templates.</p>
-            <p id="fallback" class="fallback">Already subscribed? <a id="reveal-link">Click here to reveal your templates.</a></p>
         </div>
         <div class="footer-note">
             We respect your privacy. Unsubscribe at any time.
@@ -151,34 +101,17 @@
     <script>
         (function() {
             var iframe = document.getElementById('substack-iframe');
-            var btn = document.getElementById('templates-btn');
-            var note = document.getElementById('step-note');
             var stepText = document.getElementById('step-text');
-            var fallback = document.getElementById('fallback');
-            var revealLink = document.getElementById('reveal-link');
             var loadCount = 0;
-
-            function reveal() {
-                btn.classList.add('visible');
-                note.classList.add('visible');
-                stepText.textContent = 'You\'re subscribed! Click below to access your templates:';
-            }
+            var figmaUrl = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
 
             iframe.addEventListener('load', function() {
                 loadCount++;
                 // First load = embed initializing. Second load = user submitted the form.
                 if (loadCount >= 2) {
-                    reveal();
-                } else {
-                    // Show fallback link in case user is already subscribed and iframe loaded instantly
-                    fallback.classList.add('visible');
+                    stepText.textContent = 'You\'re subscribed! Redirecting you to your templates...';
+                    window.location.href = figmaUrl;
                 }
-            });
-
-            revealLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                reveal();
-                fallback.style.display = 'none';
             });
         })();
     </script>
