@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get 20 Free LinkedIn Banner Templates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 520px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 48px 32px 32px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .form-section {
+            background: #f0f0f0;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .form-section p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        .form-row input[type="email"] {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-row input[type="email"]:focus {
+            border-color: #e6602b;
+        }
+
+        .form-row button {
+            padding: 12px 24px;
+            background: #e6602b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .form-row button:hover {
+            background: #d45524;
+        }
+
+        .footer-note {
+            padding: 16px 32px 24px;
+            text-align: center;
+            color: #777;
+            font-size: 0.8rem;
+        }
+
+        #substack-target {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>Get My 20 Editable LinkedIn Banner Templates To Turn Your Profile Into A Lead Machine</h1>
+        </div>
+        <div class="form-section">
+            <p>Drop your best email below to get instant access to the templates:</p>
+            <form id="subscribe-form" class="form-row" target="substack-iframe">
+                <input type="email" name="email" placeholder="Email Address" required>
+                <button type="submit">Get Instant Access</button>
+            </form>
+        </div>
+        <div class="footer-note">
+            We respect your privacy. Unsubscribe at any time.
+        </div>
+    </div>
+
+    <!-- Hidden iframe to submit to Substack in the background -->
+    <iframe name="substack-iframe" id="substack-target"></iframe>
+
+    <script>
+        document.getElementById('subscribe-form').addEventListener('submit', function(e) {
+            const email = this.querySelector('input[name="email"]').value;
+
+            // Submit email to Substack in the background via the hidden iframe
+            this.action = 'https://muzahidmaruf.substack.com/subscribe';
+            this.method = 'post';
+
+            // Redirect the main page to Figma immediately
+            setTimeout(function() {
+                window.location.href = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
+            }, 200);
+        });
+    </script>
+</body>
+</html>
