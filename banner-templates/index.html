@@ -78,7 +78,7 @@
             <h1>Get My 20 Editable LinkedIn Banner Templates To Turn Your Profile Into A Lead Machine</h1>
         </div>
         <div class="embed-section">
-            <p id="step-text">Drop your best email below to get instant access to the templates:</p>
+            <p id="step-text">Drop your best email below — I'll send the 20 templates straight to your inbox:</p>
             <div class="substack-embed">
                 <iframe
                     id="substack-iframe"
@@ -87,8 +87,7 @@
                     height="320"
                     style="border:1px solid #EEE; background:white;"
                     frameborder="0"
-                    scrolling="no"
-                    sandbox="allow-forms allow-scripts allow-same-origin">
+                    scrolling="no">
                 </iframe>
             </div>
         </div>
@@ -96,66 +95,5 @@
             We respect your privacy. Unsubscribe at any time.
         </div>
     </div>
-
-    <script>
-        (function() {
-            var iframe = document.getElementById('substack-iframe');
-            var stepText = document.getElementById('step-text');
-            var figmaUrl = 'https://www.figma.com/design/AbLEAxckssvQT7tuJ64Bpz/Free-Banner?node-id=0-1&t=ISOezaG9g5bhcMve-1';
-            var redirected = false;
-            var countdownStarted = false;
-            var loadCount = 0;
-            var timer = null;
-
-            function redirect() {
-                if (redirected) return;
-                redirected = true;
-                clearInterval(timer);
-                window.location.href = figmaUrl;
-            }
-
-            function startCountdown() {
-                if (countdownStarted || redirected) return;
-                countdownStarted = true;
-                var countdown = 3;
-                stepText.textContent = 'Subscribing... Redirecting in ' + countdown + 's';
-                timer = setInterval(function() {
-                    countdown--;
-                    if (countdown <= 0) {
-                        clearInterval(timer);
-                        redirect();
-                    } else {
-                        stepText.textContent = 'Subscribing... Redirecting in ' + countdown + 's';
-                    }
-                }, 1000);
-            }
-
-            // 1. Detect iframe reload (form submitted and response loaded inside iframe)
-            iframe.addEventListener('load', function() {
-                loadCount++;
-                if (loadCount >= 2) {
-                    // Form response loaded inside iframe
-                    startCountdown();
-                }
-            });
-
-            // 2. Detect user clicking inside the iframe via window blur
-            window.addEventListener('blur', function() {
-                if (!countdownStarted) {
-                    startCountdown();
-                }
-            });
-
-            // 3. Detect iframe becoming the active element
-            var activeCheck = setInterval(function() {
-                if (document.activeElement === iframe) {
-                    clearInterval(activeCheck);
-                    if (!countdownStarted) {
-                        startCountdown();
-                    }
-                }
-            }, 200);
-        })();
-    </script>
 </body>
 </html>
